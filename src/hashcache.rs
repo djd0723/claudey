@@ -7,22 +7,21 @@
 use std::path::Path;
 
 /// FNV-1a 64-bit offset basis.
-const FNV_OFFSET: u64 = 14695981039346656037;
+const FNV1A_OFFSET_BASIS: u64 = 14695981039346656037;
 /// FNV-1a 64-bit prime.
-const FNV_PRIME: u64 = 1099511628211;
+const FNV1A_PRIME: u64 = 1099511628211;
 
 /// Compute FNV-1a 64-bit hash of a byte slice.
 fn fnv1a(data: &[u8]) -> u64 {
-    let mut hash = FNV_OFFSET;
+    let mut hash = FNV1A_OFFSET_BASIS;
     for &b in data {
         hash ^= b as u64;
-        hash = hash.wrapping_mul(FNV_PRIME);
+        hash = hash.wrapping_mul(FNV1A_PRIME);
     }
     hash
 }
 
-/// Simple SHA-256-like hex encoding of a path for use as a cache filename.
-/// We use FNV-1a of the canonical path string to produce a short, safe filename.
+/// Hex-encode the FNV-1a hash of a canonical path for use as a cache filename.
 fn path_key(path: &Path) -> Option<String> {
     let canonical = std::fs::canonicalize(path).ok()?;
     let bytes = canonical.to_string_lossy().as_bytes().to_vec();
