@@ -2,6 +2,7 @@ mod aliases;
 mod datetime;
 mod fileutil;
 mod gitutil;
+mod hashcache;
 mod hookio;
 mod hooks;
 mod platform;
@@ -35,24 +36,14 @@ fn main() -> ExitCode {
 
         "suggest-compact" => hooks::suggest_compact(),
 
-        "post-edit-format" => {
+        "post-edit-clippy" => {
             let (input, raw) = hookio::read_stdin_json(STDIN_TIMEOUT, hookio::DEFAULT_MAX_SIZE);
-            hooks::post_edit_format(input, raw);
+            hooks::post_edit_clippy(input, raw);
         }
 
-        "post-edit-typecheck" => {
+        "post-edit-rustfmt" => {
             let (input, raw) = hookio::read_stdin_json(STDIN_TIMEOUT, hookio::DEFAULT_MAX_SIZE);
-            hooks::post_edit_typecheck(input, raw);
-        }
-
-        "post-edit-console-warn" => {
-            let (input, raw) = hookio::read_stdin_json(STDIN_TIMEOUT, hookio::DEFAULT_MAX_SIZE);
-            hooks::post_edit_console_warn(input, raw);
-        }
-
-        "check-console-log" => {
-            let (_input, raw) = hookio::read_stdin_json(STDIN_TIMEOUT, hookio::DEFAULT_MAX_SIZE);
-            hooks::check_console_log(raw);
+            hooks::post_edit_rustfmt(input, raw);
         }
 
         "evaluate-session" => {
@@ -128,10 +119,8 @@ fn print_usage() {
     eprintln!("  session-end            Persist session state on end");
     eprintln!("  pre-compact            Save state before compaction");
     eprintln!("  suggest-compact        Suggest manual compaction at intervals");
-    eprintln!("  post-edit-format       Auto-format JS/TS with Prettier");
-    eprintln!("  post-edit-typecheck    TypeScript check after .ts/.tsx edits");
-    eprintln!("  post-edit-console-warn Warn about console.log after edits");
-    eprintln!("  check-console-log      Check modified files for console.log");
+    eprintln!("  post-edit-clippy       Run clippy after .rs edits");
+    eprintln!("  post-edit-rustfmt      Format .rs files with rustfmt");
     eprintln!("  evaluate-session       Evaluate session for patterns");
     eprintln!();
     eprintln!("Inline hook subcommands:");
