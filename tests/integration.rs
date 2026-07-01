@@ -98,32 +98,19 @@ fn routes_suggest_compact() {
 }
 
 #[test]
-fn routes_post_edit_format() {
+fn routes_post_edit_clippy() {
     assert_routes(
-        "post-edit-format",
-        Some(r#"{"tool_input":{"file_path":"a.ts"}}"#),
+        "post-edit-clippy",
+        Some(r#"{"tool_input":{"file_path":"a.rs"}}"#),
     );
 }
 
 #[test]
-fn routes_post_edit_typecheck() {
+fn routes_post_edit_rustfmt() {
     assert_routes(
-        "post-edit-typecheck",
-        Some(r#"{"tool_input":{"file_path":"a.ts"}}"#),
+        "post-edit-rustfmt",
+        Some(r#"{"tool_input":{"file_path":"a.rs"}}"#),
     );
-}
-
-#[test]
-fn routes_post_edit_console_warn() {
-    assert_routes(
-        "post-edit-console-warn",
-        Some(r#"{"tool_input":{"file_path":"a.ts"}}"#),
-    );
-}
-
-#[test]
-fn routes_check_console_log() {
-    assert_routes("check-console-log", Some("{}"));
 }
 
 #[test]
